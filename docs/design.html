@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>资产工作台 · Design</title>
+<meta name="description" content="资产工作台（asset-workbench）设计语言：共享上游与三分叉、四层数据契约、皮套线环节链、路由机制、Agent 预设包、模型能力地图与设计原则。">
+<style>
+  :root {
+    --bg-0: #05070f;
+    --bg-1: #0a1226;
+    --card: rgba(16, 27, 54, 0.72);
+    --card-border: rgba(120, 180, 255, 0.16);
+    --ink: #e8eefb;
+    --ink-dim: #93a4c8;
+    --ink-faint: #5c6f96;
+    --accent: #4fd8e8;
+    --accent-2: #8ab4ff;
+    --warm: #f0c987;
+    --line: rgba(120, 180, 255, 0.12);
+    --radius: 14px;
+    --mono: "SFMono-Regular", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(79, 216, 232, 0.10), transparent 60%),
+      radial-gradient(900px 500px at 8% 20%, rgba(138, 180, 255, 0.08), transparent 55%),
+      linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 45%, var(--bg-0) 100%);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px 80px; }
+  header { padding: 88px 0 24px; }
+  .eyebrow { font-family: var(--mono); font-size: 12.5px; letter-spacing: .28em; color: var(--accent); text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: 42px; font-weight: 700; letter-spacing: .02em; line-height: 1.2; }
+  h1 .dot { color: var(--accent); }
+  .sub { margin-top: 16px; color: var(--ink-dim); font-size: 16px; max-width: 760px; }
+  section { margin-top: 64px; }
+  h2 { font-size: 21px; font-weight: 650; display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  h2 .no { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: .1em; }
+  .lead { color: var(--ink-dim); font-size: 14px; margin: 14px 0 22px; max-width: 780px; }
+
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .step { border: 1px solid var(--card-border); border-radius: 10px; padding: 9px 14px; background: var(--card); font-size: 13.5px; }
+  .step b { display: block; font-size: 12px; color: var(--accent); font-family: var(--mono); letter-spacing: .08em; }
+  .arrow { color: var(--ink-faint); font-size: 15px; }
+  .fork { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 4px; }
+  .fork-card { border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--card-border); background: var(--card); }
+  .fork-card .code { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .1em; }
+  .fork-card h3 { font-size: 15.5px; margin-top: 3px; }
+  .fork-card p { font-size: 13px; color: var(--ink-dim); margin-top: 5px; }
+
+  .contract-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .contract-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 16px; }
+  .contract-card .no { font-family: var(--mono); font-size: 11.5px; color: var(--accent); letter-spacing: .14em; }
+  .contract-card h3 { font-size: 15px; margin-top: 5px; }
+  .contract-card .fmt { font-family: var(--mono); font-size: 12px; color: var(--warm); margin-top: 5px; }
+  .contract-card p { font-size: 13px; color: var(--ink-dim); margin-top: 6px; }
+
+  .pipe { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .pipe-card { border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 14px; background: var(--card); }
+  .pipe-card .id { font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 700; }
+  .pipe-card .name { font-size: 14px; font-weight: 650; margin-top: 2px; }
+  .pipe-card .ch { font-size: 12px; color: var(--warm); font-family: var(--mono); margin-top: 6px; }
+  .pipe-card .rev { font-size: 12px; color: var(--ink-faint); margin-top: 3px; }
+
+  .route-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .route-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 14px 16px; }
+  .route-card h3 { font-size: 14.5px; }
+  .route-card ul { list-style: none; margin-top: 8px; }
+  .route-card li { font-size: 13px; color: var(--ink-dim); padding: 3px 0; border-bottom: 1px dashed var(--line); }
+  .route-card li:last-child { border-bottom: none; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--card-border); border-radius: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 640px; }
+  th { text-align: left; font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; color: var(--accent); padding: 10px 14px; border-bottom: 1px solid var(--line); background: rgba(120, 180, 255, 0.05); }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--ink-dim); vertical-align: top; }
+  td b { color: var(--ink); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+
+  .loop { margin-top: 14px; border: 1.5px dashed rgba(79, 216, 232, 0.4); border-radius: 12px; padding: 12px 16px; font-size: 13.5px; color: var(--ink-dim); background: rgba(79, 216, 232, 0.05); }
+  .loop b { color: var(--ink); }
+
+  .principles { list-style: none; display: grid; gap: 10px; }
+  .principles li { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 13px 16px; font-size: 14px; color: var(--ink-dim); }
+  .principles li b { color: var(--ink); font-weight: 600; }
+  .principles li .tag { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-right: 8px; letter-spacing: .1em; }
+
+  .note { margin-top: 40px; color: var(--ink-faint); font-size: 12.5px; text-align: center; font-family: var(--mono); letter-spacing: .06em; }
+  @media (max-width: 720px) { header { padding: 56px 0 16px; } h1 { font-size: 32px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">asset-workbench · Design</div>
+    <h1>资产工作台<span class="dot">.</span></h1>
+    <p class="sub">角色资产生产工作台。共享上游，分叉出口：皮套、像素游戏素材、萌化动画化共用同一套上游资产，在定妆图之后分叉。</p>
+  </header>
+
+  <section>
+    <h2><span class="no">01</span>共享上游与三分叉</h2>
+    <p class="lead">上游四步为全部业务线共用；分界点在定妆图之后。</p>
+    <div class="flow">
+      <div class="step"><b>UP-1</b>概念图</div><span class="arrow">→</span>
+      <div class="step"><b>UP-2</b>定妆图</div><span class="arrow">→</span>
+      <div class="step"><b>UP-3</b>部件语义拆分</div><span class="arrow">→</span>
+      <div class="step"><b>UP-4</b>动作语义字典</div>
+    </div>
+    <div class="fork">
+      <div class="fork-card"><span class="code">E · AVATAR</span><h3>皮套</h3><p>Live2D 模型包：.model3 / .moc3 / .physics3 / .motion3</p></div>
+      <div class="fork-card"><span class="code">P · PIXEL</span><h3>像素游戏素材</h3><p>sprite 与图集，P0-P8 环节走查</p></div>
+      <div class="fork-card"><span class="code">M · KAWAII</span><h3>萌化动画化</h3><p>萌化图与循环动画，工具三层地图</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">02</span>四层数据契约</h2>
+    <p class="lead">环节间的连接器；工具吃吐同一契约即可替换。</p>
+    <div class="contract-grid">
+      <div class="contract-card"><span class="no">CT-01</span><h3>图像契约</h3><div class="fmt">PNG-alpha / PSD 层结构</div><p>文生图 ↔ See-Through ↔ Photoshop</p></div>
+      <div class="contract-card"><span class="no">CT-02</span><h3>项目契约</h3><div class="fmt">.cmo3 + 参数 CSV</div><p>Cubism 编辑器 ↔ 外部 API ↔ CSV 导入 ↔ MCP</p></div>
+      <div class="contract-card"><span class="no">CT-03</span><h3>发布契约</h3><div class="fmt">.model3 + .moc3 + .physics3 + .motion3</div><p>模型包 ↔ VTS ↔ 游戏引擎</p></div>
+      <div class="contract-card"><span class="no">CT-04</span><h3>驱动契约</h3><div class="fmt">PARAM 映射表</div><p>OpenSeeFace ↔ VTS ↔ 模型</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">03</span>皮套线环节链</h2>
+    <p class="lead">E0-E8。每环节有通道与人工审核门，返工可定位到环节。</p>
+    <div class="pipe">
+      <div class="pipe-card"><div class="id">E0</div><div class="name">输入</div><div class="ch">资产库 CLI</div><div class="rev">素材可拆层性</div></div>
+      <div class="pipe-card"><div class="id">E1</div><div class="name">定妆</div><div class="ch">文生图 API</div><div class="rev">对称性、尺寸</div></div>
+      <div class="pipe-card"><div class="id">E2</div><div class="name">拆层</div><div class="ch">CLI / 本地推理</div><div class="rev">部件清单</div></div>
+      <div class="pipe-card"><div class="id">E3</div><div class="name">补修</div><div class="ch">PS API + 人工</div><div class="rev">可动部件、无伪影</div></div>
+      <div class="pipe-card"><div class="id">E4</div><div class="name">入编辑器</div><div class="ch">GUI 自动化</div><div class="rev">deformer 树</div></div>
+      <div class="pipe-card"><div class="id">E5</div><div class="name">绑参</div><div class="ch">CSV + Editor API</div><div class="rev">参数范围、表情口型</div></div>
+      <div class="pipe-card"><div class="id">E6</div><div class="name">物理动作</div><div class="ch">MCP</div><div class="rev">手感、动作清单</div></div>
+      <div class="pipe-card"><div class="id">E7</div><div class="name">导出</div><div class="ch">GUI + API</div><div class="rev">包完整、引用正确</div></div>
+      <div class="pipe-card"><div class="id">E8</div><div class="name">验收</div><div class="ch">VTS API</div><div class="rev">全链路、兼容性</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">04</span>路由机制</h2>
+    <p class="lead">候选工具池按路由键择优；每单记录回流为工具健康度。</p>
+    <div class="route-row">
+      <div class="route-card"><h3>路由键</h3><ul><li>输入特征</li><li>质量要求</li><li>成本约束</li><li>隐私合规</li><li>环境（显卡 / 版本）</li><li>工具健康度</li></ul></div>
+      <div class="route-card"><h3>策略顺序</h3><ul><li>规则路由（硬约束 if-then）</li><li>评分路由（权重打分）</li><li>实测路由（小样本试跑）</li></ul></div>
+      <div class="route-card"><h3>回退链</h3><ul><li>主选工具</li><li>备选工具</li><li>最后兜底：人工</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">05</span>Agent 预设包</h2>
+    <p class="lead">六组件预设加载即跑；拷贝给无历史 Agent 可承接同单。</p>
+    <div class="contract-grid">
+      <div class="contract-card"><span class="no">P-01</span><h3>preset.yaml</h3><p>元信息、触发词、版本，预设识别与加载入口</p></div>
+      <div class="contract-card"><span class="no">P-02</span><h3>rules.md</h3><p>不可违背规则：半自动、人审、验收归人</p></div>
+      <div class="contract-card"><span class="no">P-03</span><h3>pipeline.json</h3><p>环节编排与回退链</p></div>
+      <div class="contract-card"><span class="no">P-04</span><h3>contracts.md</h3><p>四层数据契约</p></div>
+      <div class="contract-card"><span class="no">P-05</span><h3>assets.md</h3><p>可拆层性检查表 / 部件映射表 / 参数映射表</p></div>
+      <div class="contract-card"><span class="no">P-06</span><h3>memory.md</h3><p>每单记录、资产库、健康度规则</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">06</span>模型能力地图与 E1 调优</h2>
+    <p class="lead">模型选型是 E1 定妆环节的风格路由调优。底模决定能画什么，LoRA 决定是什么画风。</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>内容类型</th><th>首选底模</th><th>擅长依据</th><th>部署</th></tr>
+        <tr><td><b>二次元动漫</b>（皮套主路线）</td><td>Z-Image 系 / Illustrious XL / NoobAI-XL</td><td>Z-Image 原生二次元强；Illustrious 角色特征精准、LoRA 训练首选；NoobAI 与 Illustrious 共享生态</td><td>魔搭 / 本地 8-12GB</td></tr>
+        <tr><td><b>写实 / 照片级</b></td><td>FLUX 2 Pro / RealVisXL / Juggernaut XL</td><td>材质物理、自然肤色、全能写实</td><td>云端 API / 本地</td></tr>
+        <tr><td><b>风格化 / 半写实</b></td><td>Pony V6 XL / DreamShaper XL</td><td>LoRA 库最大、混合风格强</td><td>本地</td></tr>
+        <tr><td><b>国风 / 带文字</b></td><td>Qwen-Image 系</td><td>风格信号保留强，国风优先</td><td>魔搭</td></tr>
+        <tr><td><b>像素</b></td><td>Z-Image 像素能力 / 像素 LoRA</td><td>原生像素 art</td><td>魔搭 / 本地</td></tr>
+        <tr><td><b>特定画风</b></td><td>Krea-2 等风格 LoRA 集</td><td>一键风格（水彩 / 漫画 / 霓虹）</td><td>魔搭</td></tr>
+      </table>
+    </div>
+    <div class="loop"><b>E1 调优闭环：</b>模型资产登记 → 选型路由 → 抽卡协议（固定 prompt × N seed，人筛选）→ 反馈闭环（偏好分 / 健康度回流路由权重）。</div>
+  </section>
+
+  <section>
+    <h2><span class="no">07</span>设计原则</h2>
+    <ul class="principles">
+      <li><span class="tag">PR-01</span><b>工作台只声明与展示</b>，不承载业务逻辑；复杂逻辑在 Agent 内部小循环</li>
+      <li><span class="tag">PR-02</span><b>原件是唯一真相</b></li>
+      <li><span class="tag">PR-03</span><b>契约先行</b>，声明使用纯 JSON / YAML</li>
+      <li><span class="tag">PR-04</span><b>翻译不了的不提前设计</b></li>
+      <li><span class="tag">PR-05</span><b>每环节人工审核门</b>，产出不合格不进下一步</li>
+      <li><span class="tag">PR-06</span><b>半自动编排</b>，Agent 保证成品格式与可加载，质量验收归人</li>
+    </ul>
+  </section>
+
+  <div class="note">asset-workbench · 2026-10-01</div>
+</div>
+</body>
+</html>
