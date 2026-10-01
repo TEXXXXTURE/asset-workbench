@@ -1,5 +1,7 @@
 # 资产工作台（asset-workbench）
 
+<p align="center"><img src="assets/icon.png" width="128" alt="asset-workbench icon"></p>
+
 角色资产生产工作台。共享上游，分叉出口：皮套（Live2D）、像素游戏素材、萌化动画化三条业务线共用同一套上游资产，在定妆图之后分叉。
 
 ## 项目结构
@@ -7,8 +9,9 @@
 ```
 asset-workbench/
 ├── README.md
+├── assets/
+│   └── icon.png             # 项目概念图标
 ├── docs/
-│   ├── design.html          # 设计语言展示页（GitHub Pages）
 │   └── model-map.md         # 模型能力地图与 E1 选型调优
 └── presets/
     ├── 皮套工作台预设-规格v0.3.md
@@ -74,7 +77,6 @@ P 环节对称走查（人类像素画师 × AI 工作台双轨）。
 | [presets/像素素材工作台预设-走查v0.1.md](presets/像素素材工作台预设-走查v0.1.md) | 像素线 P 环节走查、六风险、与皮套线对称/差异 |
 | [presets/皮套工作台Agent-预设运行定义v0.1.md](presets/皮套工作台Agent-预设运行定义v0.1.md) | 六组件预设包、内核循环、会话协议、首单示例 |
 | [docs/model-map.md](docs/model-map.md) | 模型能力地图与 E1 选型调优 |
-| [docs/design.html](docs/design.html) | 设计语言展示页 |
 
 ## 状态
 
