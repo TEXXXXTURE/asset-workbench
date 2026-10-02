@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>资产工作台 asset-workbench</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='4' width='11' height='11' fill='%23191a17'/%3E%3Crect x='17' y='4' width='11' height='11' fill='%23b45309'/%3E%3Crect x='4' y='17' width='11' height='11' fill='%23b45309'/%3E%3Crect x='17' y='17' width='11' height='11' fill='%23191a17'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --paper:#f4f5f2; --paper-deep:#e9ebe4; --ink:#191a17; --muted:#5d615a;
+    --line:#d5d8cf; --accent:#b45309; --accent-deep:#8a3c06; --accent-soft:#f2e4cd;
+    --slate:#475569;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--paper);color:var(--ink);font-family:system-ui,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  a{color:var(--accent-deep);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* header */
+  header{border-bottom:1px solid var(--line);padding:18px 0}
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand img{width:40px;height:40px;image-rendering:pixelated}
+  .brand h1{font-size:20px;font-weight:800;letter-spacing:.02em}
+  .brand span{color:var(--muted);font-size:13px;font-weight:500}
+  nav{display:flex;gap:6px;margin-left:auto;align-items:center;font-size:14px}
+  nav a{padding:12px 10px;border-radius:6px}
+  nav a:hover{background:var(--paper-deep);text-decoration:none}
+  .head-row{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+
+  /* hero */
+  .hero{padding:72px 24px 56px}
+  .kicker{font-size:13px;font-weight:600;color:var(--accent-deep);letter-spacing:.12em}
+  .hero h2{font-size:clamp(30px,5vw,46px);font-weight:800;line-height:1.2;margin:14px 0 18px;max-width:20em}
+  .hero p.lead{font-size:17px;color:var(--muted);max-width:34em}
+  .lines{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .line-chip{border:1px solid var(--line);background:#fff;border-radius:6px;padding:8px 14px;font-size:14px;font-weight:600}
+  .line-chip b{color:var(--accent-deep)}
+
+  /* shared upstream flow — signature */
+  .flow-band{background:var(--ink);color:#f4f5f2;padding:44px 0}
+  .flow-band h3{font-size:15px;font-weight:600;color:#c8cbc2;letter-spacing:.1em;margin-bottom:26px}
+  .flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+  .flow-step{flex:1 1 180px;border:1px solid #3a3c37;border-radius:8px;padding:18px 16px;min-width:150px;background:#21221f}
+  .flow-step .n{font-size:12px;color:#9aa09a;font-weight:600}
+  .flow-step h4{font-size:17px;font-weight:700;margin:6px 0 4px}
+  .flow-step p{font-size:13px;color:#b7bbb3}
+  .flow-step.hot{border-color:var(--accent);background:#2a2418}
+  .flow-step.hot h4{color:#f3b463}
+  .flow-arrow{flex:0 0 34px;display:flex;align-items:center;justify-content:center;color:#9aa09a}
+  .flow-arrow.vert{display:none}
+  .flow-note{font-size:13px;color:#c8cbc2;margin-top:20px}
+  .flow-note b{color:#f3b463}
+
+  /* sections */
+  section{padding:52px 0;border-bottom:1px solid var(--line)}
+  section h3{font-size:22px;font-weight:800;margin-bottom:8px}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:28px;max-width:38em}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{border:1px solid var(--line);border-radius:8px;padding:20px;background:#fff}
+  .card h4{font-size:16px;font-weight:700;margin-bottom:10px}
+  .card h4 em{font-style:normal;color:var(--accent-deep);font-size:13px;display:block;font-weight:600;margin-bottom:2px}
+  .card ul{list-style:none;font-size:14px;color:var(--muted)}
+  .card li{padding:3px 0;border-bottom:1px dashed #e6e8e1}
+  .card li:last-child{border-bottom:none}
+  .card .tag{display:inline-block;font-size:12px;font-weight:600;margin-top:12px;padding:3px 9px;border-radius:4px}
+  .tag.ok{background:#e4efe2;color:#2f6b2f}
+  .tag.wip{background:var(--accent-soft);color:var(--accent-deep)}
+  .tag.gray{background:#eceeec;color:var(--slate)}
+
+  /* connector */
+  .con-row{display:grid;grid-template-columns:220px 1fr;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:14px}
+  .con-row .k{background:var(--paper-deep);padding:14px 16px;font-weight:700;font-size:14px;display:flex;align-items:center}
+  .con-row .v{padding:14px 16px;font-size:14px;color:#3c3f39;background:#fff}
+  .steps{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .step-chip{flex:1 1 160px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:12px 14px}
+  .step-chip b{display:block;font-size:14px}
+  .step-chip span{font-size:12px;color:var(--muted)}
+
+  /* contracts */
+  .contracts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .con-item{border-left:3px solid var(--accent);background:#fff;border-radius:4px;padding:12px 14px;font-size:13px}
+  .con-item b{display:block;font-size:14px;margin-bottom:2px}
+  .con-item span{color:var(--muted)}
+
+  footer{padding:36px 0 60px;color:var(--muted);font-size:13px}
+  .foot-links{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .foot-links a{color:var(--ink);font-weight:600;padding:10px 8px;border-radius:6px}
+  .foot-links a:hover{background:var(--paper-deep);text-decoration:none}
+
+  @media (max-width:820px){
+    .grid3{grid-template-columns:1fr}
+    .contracts{grid-template-columns:1fr 1fr}
+    .head-row nav{margin-left:0;width:100%;flex-wrap:wrap}
+    .hero{padding:48px 0 40px}
+    .flow{flex-direction:column}
+    .flow-arrow.horz{display:none}
+    .flow-arrow.vert{display:flex;height:26px}
+    .con-row{grid-template-columns:1fr}
+  }
+  @media (max-width:480px){.contracts{grid-template-columns:1fr}}
+  @media (max-width:640px){
+    .brand span{font-size:14px}
+    .flow-step p,.flow-note,.con-row .v,.step-chip span{font-size:14px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap head-row">
+    <div class="brand">
+      <img src="../assets/icon.png" alt="资产工作台图标">
+      <div>
+        <h1>资产工作台</h1>
+        <span>asset-workbench · 角色资产生产工作台</span>
+      </div>
+    </div>
+    <nav>
+      <a href="软件接入Skill生成规范-v0.1.md">接入规范</a>
+      <a href="model-map.md">模型地图</a>
+      <a href="https://github.com/TEXXXXTURE/asset-workbench">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap hero">
+  <div class="kicker">角色资产生产管线</div>
+  <h2>共享上游，分叉出口。<br>一套资产源，三种业务线。</h2>
+  <p class="lead">皮套（Live2D）、像素游戏素材、萌化动画化共用同一套上游资产：概念图、定妆图、部件语义拆分、动作语义字典。分界点在定妆图之后，业务线各自选择出口。任何具备 API / MCP / CLI 可编程面的工程软件，可按规范接入并随时替换。</p>
+  <div class="lines">
+    <span class="line-chip"><b>E</b> 皮套 · Live2D 模型包</span>
+    <span class="line-chip"><b>P</b> 像素 · 游戏素材 / 图集</span>
+    <span class="line-chip"><b>M</b> 萌化 · 循环动画</span>
+  </div>
+</div>
+
+<div class="flow-band">
+  <div class="wrap">
+    <h3>共享上游 · 四个环节</h3>
+    <div class="flow">
+      <div class="flow-step"><span class="n">01</span><h4>概念图</h4><p>角色 / 资产概念输入</p></div>
+      <div class="flow-arrow horz">
+        <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><path d="M0 6h19M14 1l6 5-6 5" stroke="currentColor" stroke-width="1.8"/></svg>
+      </div>
+      <div class="flow-step hot"><span class="n">02</span><h4>定妆图</h4><p>分叉点 · 业务线分道</p></div>
+      <div class="flow-arrow horz">
+        <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><path d="M0 6h19M14 1l6 5-6 5" stroke="currentColor" stroke-width="1.8"/></svg>
+      </div>
+      <div class="flow-step"><span class="n">03</span><h4>部件语义拆分</h4><p>可拆层性 · 部件映射</p></div>
+      <div class="flow-arrow horz">
+        <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><path d="M0 6h19M14 1l6 5-6 5" stroke="currentColor" stroke-width="1.8"/></svg>
+      </div>
+      <div class="flow-step"><span class="n">04</span><h4>动作语义字典</h4><p>动作资产 · 可复用来源</p></div>
+      <div class="flow-arrow vert">
+        <svg width="12" height="22" viewBox="0 0 12 22" fill="none"><path d="M6 0v19M1 14l5 6 5-6" stroke="currentColor" stroke-width="1.8"/></svg>
+      </div>
+    </div>
+    <p class="flow-note">分界点在定妆图之后：<b>E</b> 走 2D 绑定 / 3D 建模，<b>P</b> 走像素帧序列，<b>M</b> 走动画化。</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h3>三条业务线</h3>
+    <p class="sec-sub">每线 = 环节流水线 + 四类 Agent 通道 + 人工审核门；四层数据契约连接工具。</p>
+    <div class="grid3">
+      <div class="card">
+        <h4><em>E 线</em>皮套</h4>
+        <ul>
+          <li>出口：Live2D 模型包（.model3 / .moc3 / .physics3 / .motion3）</li>
+          <li>环节：E0 输入 → E1 定妆 → E2 拆层 → E3 补修 → E4 入编辑器 → E5 绑参 → E6 物理动作 → E7 导出 → E8 验收</li>
+          <li>通道：Cubism 外部集成 API + 参数 CSV（主），Blender 3D 建模 / VRM 出口（已验证）</li>
+        </ul>
+        <span class="tag wip">规格 v0.3 落档</span>
+      </div>
+      <div class="card">
+        <h4><em>P 线</em>像素</h4>
+        <ul>
+          <li>出口：像素游戏素材（sprite / 图集）</li>
+          <li>双轨：人类像素画师 × AI 工作台</li>
+          <li>风险：帧一致性 / 调色板锁定 / 尺寸网格 / 循环闭合 / 图集格式 / 商用许可</li>
+          <li>通道：Aseprite CLI / 社区 MCP 候选，Blender 摆 pose 预渲染候选</li>
+        </ul>
+        <span class="tag gray">走查 v0.1 落档</span>
+      </div>
+      <div class="card">
+        <h4><em>M 线</em>萌化动画化</h4>
+        <ul>
+          <li>出口：萌化图 / 循环动画（GIF / sprite sheet / JSON）</li>
+          <li>手绘：Animated Drawings → Dreamina Sketch-to-Video → ToonCrafter</li>
+          <li>像素：Sprite-AI → Ludo Forge Pixel / Anijam</li>
+          <li>接入通道待定（API 优先，GUI 自动化兜底）</li>
+        </ul>
+        <span class="tag gray">工具调研完成</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h3>半开放软件接入</h3>
+    <p class="sec-sub">不绑定具体软件。任何具备 API / MCP / CLI 可编程面的工程软件，按规范生成接入 Skill，通过最小通路验证后登记，供路由主动选择；满足同一能力接口的软件可随时替换。</p>
+    <div class="con-row">
+      <div class="k">接入门槛</div>
+      <div class="v">MCP server / CLI / 本地服务（socket·HTTP）/ SDK 脚本 API —— 任一命中即入选</div>
+    </div>
+    <div class="con-row">
+      <div class="k">生成器</div>
+      <div class="v">connector-skill-builder：探测 → 映射 → 生成 → 验证 → 登记</div>
+    </div>
+    <div class="con-row">
+      <div class="k">能力接口</div>
+      <div class="v">3D 建模 / 绑定 / 导出 / 拆层 / 绑参 / 像素帧 / 渲染回传</div>
+    </div>
+    <div class="steps">
+      <div class="step-chip"><b>探测</b><span>定位可编程面，跑最小探针</span></div>
+      <div class="step-chip"><b>映射</b><span>能力 → 能力接口清单</span></div>
+      <div class="step-chip"><b>生成</b><span>产出 SKILL.md + 资源</span></div>
+      <div class="step-chip"><b>验证</b><span>心跳 / 读状态 / 执行 / 回传</span></div>
+      <div class="step-chip"><b>登记</b><span>写入路由表，可被择优</span></div>
+    </div>
+    <div class="con-row">
+      <div class="k">实例记录</div>
+      <div class="v">Blender 5.2.2 LTS — 3D 建模 / 绑定 / 导出 / 渲染回传 — MCP（socket 直连 127.0.0.1:9876）— <span class="tag ok" style="margin:0">2026-10-02 已验证</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h3>四层数据契约</h3>
+    <p class="sec-sub">契约在环节之间传递数据，跨软件保持一致。</p>
+    <div class="contracts">
+      <div class="con-item"><b>图像契约</b><span>PNG-alpha / PSD 层结构</span></div>
+      <div class="con-item"><b>项目契约</b><span>.cmo3 + 参数 CSV</span></div>
+      <div class="con-item"><b>发布契约</b><span>.model3 + .moc3 + .physics3 + .motion3</span></div>
+      <div class="con-item"><b>驱动契约</b><span>PARAM 映射表</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-links">
+      <a href="软件接入Skill生成规范-v0.1.md">软件接入 Skill 生成规范 v0.1</a>
+      <a href="model-map.md">模型能力地图</a>
+      <a href="https://github.com/TEXXXXTURE/asset-workbench">GitHub 仓库</a>
+    </div>
+    <p>asset-workbench · 角色资产生产工作台 · 状态：半开放接入已验证（Blender 实例），工作台外壳未动工</p>
+  </div>
+</footer>
+
+</body>
+</html>
