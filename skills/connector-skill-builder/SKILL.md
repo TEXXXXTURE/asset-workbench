@@ -84,3 +84,4 @@ description: 为任意具备 API / MCP / CLI 可编程面的工程软件生成�
 | SKILL.md 结构 | `references/skill-schema.md` | 生成步骤 |
 | 验证协议 | `references/verification.md` | 验证步骤 |
 | 探针模板 | `scripts/probe_template.py` | 探测步骤 |
+| 工具推荐清单 | `references/tool-recipes.md` | 推荐 / 检索候选工具时 |
