@@ -4,7 +4,7 @@ id: plan.workbench.avatar-agent
 name: 皮套工作台 Agent · 预设运行定义 v0.1
 status: draft
 updated: 2026-10-01
-owner: A
+owner: <项目负责人>
 origin: 基于《皮套工作台预设-规格v0.3》运行化；"预设=可搬运 Agent"（PRD FR-04）落地
 stage: 02
 ---
