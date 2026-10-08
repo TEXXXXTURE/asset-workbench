@@ -13,7 +13,7 @@
                                     │ 分界点：定妆图之后分叉
          ┌──────────────────────────┼──────────────────────────┐
          ▼                          ▼                          ▼
-      皮套线                   像素线                   萌化线
+      Skin 预设                Pixel 预设               Chibi 预设
    Live2D 模型包              sprite / 图集             GIF / sprite sheet / JSON
           └────────────── 业务线为预设选项，持续推出 ─────────────┘
 ```
@@ -31,22 +31,22 @@ asset-workbench/
 │   ├── model-map.md                   # 模型能力地图与定妆环节选型调优
 │   └── 软件接入Skill生成规范-v0.1.md  # 半开放软件接入规范
 ├── presets/
-│   ├── 皮套工作台预设-规格v0.3.md
-│   ├── 像素素材工作台预设-走查v0.1.md
-│   └── 皮套工作台Agent-预设运行定义v0.1.md
+│   ├── Skin预设-规格v0.3.md
+│   ├── Pixel预设-走查v0.1.md
+│   └── Skin-Agent-预设运行定义v0.1.md
 └── skills/
     └── connector-skill-builder/       # 软件接入 Skill 生成器
 ```
 
 ## 业务线（预设选项 · 持续扩展）
 
-首批预设：皮套 / 像素 / 萌化动画化。各线为工作台预设选项，模拟正常工作步骤；后续业务线持续推出。
+当前内置 Skin / Pixel / Chibi 三套预设风格；它们是众多美术资源风格类型中的三种，后续可扩展其他类型。各预设模拟正常工作步骤（概念 → 定妆 → 部件拆分 → 动作字典 → 分叉产出）。
 
 | 线 | 资产品类 | 出口 | 落档 |
 |---|---|---|---|
-| 皮套线 | Live2D 角色模型 | .model3/.moc3/.physics3/.motion3 | 规格 v0.3 |
-| 像素线 | 像素游戏素材 | sprite / 图集 | 走查 v0.1 |
-| 萌化线 | 萌化图 / 循环动画 | GIF / sprite sheet / JSON | 工具调研完成 |
+| Skin 预设（虚拟形象风格） | Live2D 角色模型 | .model3/.moc3/.physics3/.motion3 | 规格 v0.3 |
+| Pixel 预设（像素美术风格） | 像素游戏素材 | sprite / 图集 | 走查 v0.1 |
+| Chibi 预设（Q 版萌系风格） | Q 版形象 / 循环动画 | GIF / sprite sheet / JSON | 工具调研完成 |
 
 各线环节规格见 [presets/](presets/) 文档。
 
@@ -75,15 +75,15 @@ asset-workbench/
 
 | 文档 | 内容 |
 |---|---|
-| [presets/皮套工作台预设-规格v0.3.md](presets/皮套工作台预设-规格v0.3.md) | 皮套线各环节规格（概念→定妆→拆层→字典→分叉产出）、四层契约、拆层环节 API 清单、路由、输出契约、单点测试计划 |
-| [presets/像素素材工作台预设-走查v0.1.md](presets/像素素材工作台预设-走查v0.1.md) | 像素线环节走查、六风险、与皮套线对称/差异 |
-| [presets/皮套工作台Agent-预设运行定义v0.1.md](presets/皮套工作台Agent-预设运行定义v0.1.md) | 六组件预设包、内核循环、会话协议、首单示例 |
+| [presets/Skin预设-规格v0.3.md](presets/Skin预设-规格v0.3.md) | Skin 预设各环节规格（概念→定妆→拆层→字典→分叉产出）、四层契约、拆层环节 API 清单、路由、输出契约、单点测试计划 |
+| [presets/Pixel预设-走查v0.1.md](presets/Pixel预设-走查v0.1.md) | Pixel 预设环节走查、六风险、与 Skin 预设对称/差异 |
+| [presets/Skin-Agent-预设运行定义v0.1.md](presets/Skin-Agent-预设运行定义v0.1.md) | 六组件预设包、内核循环、会话协议、首单示例 |
 | [docs/model-map.md](docs/model-map.md) | 模型能力地图与 E1 选型调优 |
 | [docs/软件接入Skill生成规范-v0.1.md](docs/软件接入Skill生成规范-v0.1.md) | 半开放软件接入：门槛、四步生成流程、登记与可插拔、实例记录 |
 
 ## 状态
 
-- 业务线预设：皮套（规格 v0.3）、像素（走查 v0.1）、萌化（工具调研完成）落档，持续扩展中
+- 预设风格：Skin（规格 v0.3）、Pixel（走查 v0.1）已落档；Chibi（Q 版萌系，工具调研完成）持续扩展中
 - 单点测试计划：台阶 0 魔搭在线拆层试跑 → 台阶 1 本地部署 → 拆层环节 CSV 验证 → GUI 校准
 - 半开放软件接入：Blender 实例已验证（socket 直连 9876），connector-skill-builder 生成器就绪（2026-10-02）
 - 工作台外壳未动工

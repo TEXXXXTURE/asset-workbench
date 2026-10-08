@@ -6,7 +6,7 @@
 
 | 内容类型 | 首选底模 | 擅长依据 | 部署 |
 |---|---|---|---|
-| 二次元动漫（皮套主路线） | Z-Image 系 / Illustrious XL / NoobAI-XL | Z-Image 原生二次元强（动漫、漫画、像素多能，魔搭生态活跃）；Illustrious 角色特征精准、LoRA 训练首选；NoobAI 角色知识最深、与 Illustrious 共享生态 | 魔搭 / 创空间 / 本地 SDXL 8-12GB |
+| 二次元动漫（Skin 预设主路线） | Z-Image 系 / Illustrious XL / NoobAI-XL | Z-Image 原生二次元强（动漫、漫画、像素多能，魔搭生态活跃）；Illustrious 角色特征精准、LoRA 训练首选；NoobAI 角色知识最深、与 Illustrious 共享生态 | 魔搭 / 创空间 / 本地 SDXL 8-12GB |
 | 写实 / 照片级 | FLUX 2 Pro / RealVisXL / Juggernaut XL | FLUX 材质物理最接近摄影；RealVisXL 自然肤色、真实光影；Juggernaut 全能写实 | 云端 API / 本地 |
 | 风格化 / 半写实全能 | Pony V6 XL / DreamShaper XL | Pony LoRA 库最大、风格化与混合风格强；DreamShaper 半写实全能 | 本地 |
 | 国风 / 带文字 | Qwen-Image 系 | 风格信号保留强，国风优先，带文字海报 | 魔搭 |

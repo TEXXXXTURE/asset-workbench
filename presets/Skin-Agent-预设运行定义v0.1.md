@@ -1,17 +1,17 @@
 ---
 type: plan
 id: plan.workbench.avatar-agent
-name: 皮套工作台 Agent · 预设运行定义 v0.1
+name: Skin 预设 Agent · 预设运行定义 v0.1
 status: draft
 updated: 2026-10-01
 owner: <项目负责人>
-origin: 基于《皮套工作台预设-规格v0.3》运行化；"预设=可搬运 Agent"（PRD FR-04）落地
+origin: 基于《Skin预设-规格v0.3》运行化；"预设=可搬运 Agent"（PRD FR-04）落地
 stage: 02
 ---
 
-# 皮套工作台 Agent · 预设运行定义 v0.1
+# Skin 预设 Agent · 预设运行定义 v0.1
 
-> 目标：把规格 v0.3 变成"空 Agent 加载即跑"的预设包。一个全新会话（无历史）读入本包 + 规格 v0.3，即可直接承接皮套单。预设 = 纯声明（YAML/JSON/Markdown 规则），不承载业务逻辑（ADR-0001）。
+> 目标：把规格 v0.3 变成"空 Agent 加载即跑"的预设包。一个全新会话（无历史）读入本包 + 规格 v0.3，即可直接承接 Skin 单。预设 = 纯声明（YAML/JSON/Markdown 规则），不承载业务逻辑（ADR-0001）。
 
 ## 0. 预设加载（Agent 启动时）
 
@@ -29,8 +29,8 @@ stage: 02
 ```yaml
 name: avatar-workbench
 version: 0.1
-business: Live2D 皮套接单（骨骼绑定 + VTS 直播驱动）
-trigger: "用皮套预设" / "做皮套" / "接皮套单"
+business: Live2D 虚拟形象（Skin）接单（骨骼绑定 + VTS 直播驱动）
+trigger: "用 Skin 预设" / "做 Skin" / "接 Skin 单"
 pipeline: E0..E8            # 引用 pipeline.json
 contracts: 图像/项目/发布/驱动  # 引用 contracts.md
 assets: [可拆层性检查表, 部件映射表, 参数映射表+CSV模板]
@@ -96,9 +96,9 @@ output: 交付包              # 格式完整、VTS 可加载；质量验收归�
 ## 5. 首单示例（下达指令 → 开始工作）
 
 ```
-用户：用皮套预设。做一个 Q 版少女 Vtuber 半身皮套，6 个表情 + 日语口型，
+用户：用 Skin 预设。做一个 Q 版少女 Vtuber 半身虚拟形象，6 个表情 + 日语口型，
       客户素材是这张定妆图，素材不能外传。
-Agent：✅ 已加载皮套预设 v0.1（规则/契约/资产就绪）。
+Agent：✅ 已加载 Skin 预设 v0.1（规则/契约/资产就绪）。
       先做 E0：需求规格化 + 可拆层性检查——
       · 正面站姿 ✅ · 单角色 ✅ · 背景干净 ✅ · 可对称 ⚠️（右手略透视）
       → 建议：先过 E1 定妆做对称修正，再进 E2。素材不敏感→E2 走本地 ROCm 路线。
